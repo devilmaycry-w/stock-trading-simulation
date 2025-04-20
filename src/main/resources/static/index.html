@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TradePro | Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="styles1.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+</head>
+<body>
+<div class="app-container">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <i class="fas fa-chart-line"></i>
+      <span>TradePro</span>
+    </div>
+
+    <nav>
+      <a href="#" class="active" id="nav-dashboard">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="#" id="nav-trade">
+        <i class="fas fa-exchange-alt"></i>
+        <span>Trade</span>
+        <span class="badge hidden" id="trade-badge">0</span>
+      </a>
+      <a href="#" id="nav-portfolio">
+        <i class="fas fa-wallet"></i>
+        <span>Portfolio</span>
+      </a>
+      <a href="#" id="nav-watchlist">
+        <i class="fas fa-star"></i>
+        <span>Watchlist</span>
+        <span class="badge hidden" id="watchlist-badge">0</span>
+      </a>
+      <a href="#" id="nav-settings">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="user-profile">
+      <div class="user-avatar" id="user-avatar">U</div>
+      <div class="user-info">
+        <span class="user-name" id="user-name">User</span>
+        <span class="user-email" id="user-email">user@example.com</span>
+      </div>
+    </div>
+    <button class="btn-secondary" id="logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+    <header>
+      <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" id="stock-search" placeholder="Search stocks...">
+      </div>
+
+      <div class="header-actions">
+        <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+        <button class="btn-notification" id="notifications-btn">
+          <i class="fas fa-bell"></i>
+          <span class="badge hidden" id="notification-badge">0</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="content" id="main-content">
+      <!-- Dashboard View -->
+      <div id="dashboard-view">
+        <!-- Portfolio Summary -->
+        <section class="card portfolio-summary">
+          <h2><i class="fas fa-wallet"></i> My Portfolio</h2>
+          <div class="portfolio-metrics">
+            <div class="metric">
+              <span>Total Value</span>
+              <h3 id="portfolio-value">$0.00</h3>
+            </div>
+            <div class="metric">
+              <span>Today's Change</span>
+              <h3 id="daily-change">+0.00%</h3>
+            </div>
+            <div class="metric">
+              <span>Total Profit</span>
+              <h3 id="total-profit">$0.00</h3>
+            </div>
+            <div class="metric">
+              <span>Available Cash</span>
+              <h3 id="available-cash">$10,000.00</h3>
+            </div>
+          </div>
+        </section>
+
+        <!-- Trading Panel -->
+        <section class="card trading-panel">
+          <h2><i class="fas fa-exchange-alt"></i> Trade Stocks</h2>
+          <div class="trading-container">
+            <div class="stock-selector">
+              <select id="stock-select">
+                <option value="">Select Stock</option>
+              </select>
+              <div class="stock-price">
+                <div class="price-display" id="current-price">$0.00</div>
+                <div class="change" id="price-change">+0.00%</div>
+              </div>
+            </div>
+
+            <div class="order-form">
+              <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" id="order-quantity" min="1" value="1">
+              </div>
+              <div class="form-group">
+                <label>Order Type</label>
+                <select id="order-type">
+                  <option value="market">Market</option>
+                  <option value="limit">Limit</option>
+                  <option value="stop">Stop</option>
+                </select>
+              </div>
+              <div class="form-group limit-price-group" id="limit-price-group" style="display: none;">
+                <label>Limit Price</label>
+                <input type="number" id="limit-price" min="0.01" step="0.01">
+              </div>
+
+              <div class="order-buttons">
+                <button class="btn-buy" id="buy-btn">
+                  <i class="fas fa-arrow-up"></i> Buy
+                </button>
+                <button class="btn-sell" id="sell-btn">
+                  <i class="fas fa-arrow-down"></i> Sell
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Chart -->
+        <div class="chart-card">
+          <div class="stock-header">
+            <h2 id="stock-symbol">No Stock Selected</h2>
+            <div id="stock-price-change" class="price-change">$0.00 <span>+0.00%</span></div>
+          </div>
+
+          <div class="time-filters">
+            <button data-range="1D" class="active">1D</button>
+            <button data-range="1W">1W</button>
+            <button data-range="1M">1M</button>
+            <button data-range="3M">3M</button>
+            <button data-range="1Y">1Y</button>
+            <button data-range="ALL">ALL</button>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="stock-chart" height="300"></canvas>
+          </div>
+
+          <div class="chart-controls">
+            <button class="chart-btn active" data-type="candlestick"><i class="fas fa-chart-bar"></i></button>
+            <button class="chart-btn" data-type="line"><i class="fas fa-chart-line"></i></button>
+            <button class="chart-btn" data-type="bar"><i class="fas fa-chart-bar"></i></button>
+            <div class="indicator-select">
+              <select id="technical-indicator">
+                <option value="">No Indicator</option>
+                <option value="sma">SMA (20)</option>
+                <option value="ema">EMA (12)</option>
+                <option value="rsi">RSI (14)</option>
+                <option value="macd">MACD</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Portfolio Holdings -->
+        <section class="card portfolio-holdings">
+          <h2><i class="fas fa-coins"></i> Your Holdings</h2>
+          <div class="holdings-table">
+            <table>
+              <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Avg Cost</th>
+                <th>Current Price</th>
+                <th>Value</th>
+                <th>Profit/Loss</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody id="holdings-body">
+              <!-- Filled dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Watchlist View (hidden by default) -->
+      <div id="watchlist-view" style="display: none;">
+        <section class="card">
+          <h2><i class="fas fa-star"></i> Your Watchlist</h2>
+          <div class="watchlist-actions">
+            <div class="search-bar">
+              <i class="fas fa-search"></i>
+              <input type="text" id="watchlist-search" placeholder="Search watchlist...">
+            </div>
+            <button class="btn-primary" id="add-to-watchlist">
+              <i class="fas fa-plus"></i> Add Stock
+            </button>
+          </div>
+          <div class="watchlist-table">
+            <table>
+              <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Change</th>
+                <th>Volume</th>
+                <th>Market Cap</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody id="watchlist-body">
+              <!-- Filled dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- Settings View (hidden by default) -->
+      <div id="settings-view" style="display: none;">
+        <section class="card">
+          <h2><i class="fas fa-cog"></i> Settings</h2>
+          <div class="settings-form">
+            <div class="form-group">
+              <label>Theme</label>
+              <select id="theme-select">
+                <option value="dark">Dark</option>
+                <option value="light">Light</option>
+                <option value="system">System Default</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Notifications</label>
+              <div class="checkbox-group">
+                <input type="checkbox" id="price-alerts" checked>
+                <label for="price-alerts">Price alerts</label>
+              </div>
+              <div class="checkbox-group">
+                <input type="checkbox" id="order-confirmations" checked>
+                <label for="order-confirmations">Order confirmations</label>
+              </div>
+            </div>
+            <button class="btn-primary" id="save-settings">
+              <i class="fas fa-save"></i> Save Settings
+            </button>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast hidden" id="global-toast"></div>
+
+<!-- Add to Watchlist Modal -->
+<div class="modal hidden" id="add-watchlist-modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>Add to Watchlist</h3>
+      <button class="close-modal">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Stock Symbol</label>
+        <input type="text" id="watchlist-symbol" placeholder="e.g. AAPL">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary close-modal">Cancel</button>
+      <button class="btn-primary" id="confirm-add-watchlist">Add Stock</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+<!--<script src="chart.js"></script>-->
+</body>
+</html>

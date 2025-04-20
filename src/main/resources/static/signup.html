@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sign Up | TradePro</title>
+    <link href="styles1.css" rel="stylesheet" />
+</head>
+<body>
+<div class="content" style="max-width: 400px; margin: auto; padding: 4rem 1rem;">
+    <h2 style="margin-bottom: 1rem;">Create a TradePro Account</h2>
+    <form id="signup-form" class="card">
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" id="signup-email" required />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="signup-password" required />
+        </div>
+        <button type="submit" class="btn-buy" style="margin-top: 1rem;">Register</button>
+        <p style="margin-top: 1rem;">Already have an account? <a href="login.html">Login</a></p>
+    </form>
+    <div class="toast hidden" id="signup-toast"></div>
+</div>
+
+<script>
+    const toast = document.getElementById('signup-toast');
+
+    function showToast(message, type = 'error') {
+      toast.textContent = message;
+      toast.className = `toast ${type} show`;
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value.trim();
+
+      if (!email || !password) {
+        showToast("All fields are required");
+        return;
+      }
+
+      try {
+        // Register user
+        const registerResponse = await fetch('http://localhost:8080/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const registerData = await registerResponse.json();
+        if (!registerResponse.ok) throw new Error(registerData.error || "Registration failed");
+
+        // Auto-login after registration
+        const loginResponse = await fetch('http://localhost:8080/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const loginData = await loginResponse.json();
+        if (!loginResponse.ok) throw new Error(loginData.error || "Auto-login failed");
+
+        localStorage.setItem('jwt', loginData.token);
+        localStorage.setItem('userId', loginData.user.id); // Store userId
+        showToast("Registration successful! Logging in...", "success");
+        setTimeout(() => window.location.href = 'index.html', 2000);
+      } catch (err) {
+        showToast(err.message);
+      }
+    });
+</script>
+</body>
+</html>

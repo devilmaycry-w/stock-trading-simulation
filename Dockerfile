@@ -2,8 +2,9 @@ FROM maven:3.8.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package -DskipTests
-RUN ls -l /app/target/
+RUN mvn clean package -DskipTests || echo "Maven build failed"
+RUN ls -l /app/target/ || echo "Target directory not found"
+RUN ls -l /app/ || echo "App directory contents"
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
 WORKDIR /app

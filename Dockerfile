@@ -3,12 +3,11 @@ WORKDIR /app
 COPY pom.xml .
 COPY src ./src
 RUN mvn clean package -DskipTests
-RUN ls -l /app/target/
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jre-alpine
 VOLUME /tmp
 WORKDIR /app
 COPY --from=builder /app/target/stock-trading-simulator-1.0-SNAPSHOT.jar app.jar
-RUN ls -l /app/ || echo "Runtime app directory not found"
-RUN test -f /app/app.jar || echo "app.jar not found in runtime"
+RUN chmod +x /app/app.jar
+RUN ls -l /app/
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

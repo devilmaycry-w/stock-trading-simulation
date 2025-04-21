@@ -30,28 +30,6 @@ A **web-based stock trading simulator** built for the **EazyByts internship demo
 
 ---
 
-## 📂 Project Structure
-
-```
-stock-trading/
-├── src/
-│   ├── main/
-│   │   ├── java/com/eazybytes/stocktrading/
-│   │   │   ├── config/          # SecurityConfig, JwtUtils, WebConfig
-│   │   │   ├── controller/      # AuthController, StockController, PortfolioController
-│   │   │   ├── entity/          # User, Stock entities
-│   │   │   ├── repository/      # UserRepository, StockRepository
-│   │   │   ├── service/         # UserDetailsServiceImpl
-│   ├── resources/
-│       ├── static/              # app.js, signup.html, login.html, index.html, tailwind.css
-│       ├── application.properties # MySQL config
-├── pom.xml                      # Maven dependencies
-├── tailwind.config.js          # Tailwind CSS configuration
-└── README.md
-```
-
----
-
 ## 🧑‍💻 Setup Instructions
 
 ### ✅ Prerequisites

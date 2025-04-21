@@ -29,7 +29,7 @@
 
     function showToast(message, type = 'error') {
       toast.textContent = message;
-      toast.className = `toast ${type} show`;
+      toast.className = toast ${type} show;
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
 

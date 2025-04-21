@@ -1,6 +1,7 @@
 // ===== Constants =====
-const API_BASE = 'http://192.168.97.73:8080/api'; // Backend API base URL
-const DEMO_MODE = true; // Set to false for backend integration
+//const API_BASE = 'https://68a8-2401-4900-7c15-f7d8-cd83-3f55-98c2-2164.ngrok-free.app/api';
+const API_BASE = 'http://192.168.97.73:8080/api'// Backend API base URL
+const DEMO_MODE = false; // Set to false for backend integration
 const INITIAL_CASH = 10000; // Starting cash
 
 // ===== State =====
@@ -79,7 +80,7 @@ function stringToColor(str) {
         hash = str.charCodeAt(i) + ((hash << 5) - hash);
     }
     const hue = Math.abs(hash % 360);
-    return `hsl(${hue}, 70%, 60%)`;
+    return hsl(${hue}, 70%, 60%);
 }
 
 function toggleModal(modal, show) {
@@ -210,17 +211,17 @@ const DataService = {
         }
 
         try {
-            console.log('Fetching stocks from:', `${API_BASE}/stocks`);
-            const response = await fetch(`${API_BASE}/stocks`, {
+            console.log('Fetching stocks from:', ${API_BASE}/stocks);
+            const response = await fetch(${API_BASE}/stocks, {
                 headers: {
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': Bearer ${token},
                     'Content-Type': 'application/json'
                 }
             });
 
             if (!response.ok) {
                 const error = await response.text();
-                showToast(`Failed to fetch stocks: ${error}`, 'error');
+                showToast(Failed to fetch stocks: ${error}, 'error');
                 return [];
             }
 
@@ -249,7 +250,7 @@ const DataService = {
         stocks.forEach(stock => {
             const option = document.createElement('option');
             option.value = stock.symbol;
-            option.textContent = `${stock.symbol} - ${stock.name}`;
+            option.textContent = ${stock.symbol} - ${stock.name};
             stockSelect.appendChild(option);
         });
     },
@@ -258,8 +259,8 @@ const DataService = {
         if (!stock) return;
         const prevPrice = selectedStock?.price || stock.price;
         currentPriceDisplay.textContent = formatCurrency(stock.price);
-        priceChangeDisplay.textContent = `${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%`;
-        priceChangeDisplay.className = `change ${stock.change >= 0 ? 'positive' : 'negative'}`;
+        priceChangeDisplay.textContent = ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)}%;
+        priceChangeDisplay.className = change ${stock.change >= 0 ? 'positive' : 'negative'};
 
         if (stock.price > prevPrice) {
             currentPriceDisplay.classList.add('pulse-up');
@@ -361,15 +362,15 @@ const PortfolioManager = {
                     throw new Error('Missing token or userId');
                 }
                 console.log('Fetching portfolio for userId:', userId);
-                const response = await fetch(`${API_BASE}/users/${userId}/portfolio`, {
+                const response = await fetch(${API_BASE}/users/${userId}/portfolio, {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        'Authorization': Bearer ${token},
                         'Content-Type': 'application/json'
                     }
                 });
                 if (!response.ok) {
                     const errorText = await response.text();
-                    throw new Error(`Failed to fetch portfolio: ${errorText}`);
+                    throw new Error(Failed to fetch portfolio: ${errorText});
                 }
                 const data = await response.json(); // { holdings: { [symbol]: { quantity, averagePrice } } }
                 console.log('Portfolio response:', data);
@@ -438,8 +439,8 @@ const PortfolioManager = {
         portfolioValue.textContent = formatCurrency(totalValue);
         totalProfit.textContent = formatCurrency(totalProfitValue);
         availableCash.textContent = formatCurrency(portfolio.cash);
-        dailyChange.textContent = `${dailyChangePercent >= 0 ? '+' : ''}${dailyChangePercent.toFixed(2)}%`;
-        dailyChange.className = `metric ${dailyChangePercent >= 0 ? 'positive' : 'negative'}`;
+        dailyChange.textContent = ${dailyChangePercent >= 0 ? '+' : ''}${dailyChangePercent.toFixed(2)}%;
+        dailyChange.className = metric ${dailyChangePercent >= 0 ? 'positive' : 'negative'};
 
         this.updateHoldingsTable();
     },
@@ -484,7 +485,7 @@ const PortfolioManager = {
                 delete portfolio.holdings[symbol];
                 localStorage.setItem('portfolio', JSON.stringify(portfolio));
                 this.updatePortfolio();
-                showToast(`Removed ${symbol} from holdings`, 'success');
+                showToast(Removed ${symbol} from holdings, 'success');
             });
         });
     },
@@ -554,7 +555,7 @@ const PortfolioManager = {
 
                 localStorage.setItem('portfolio', JSON.stringify(portfolio));
                 this.updatePortfolio();
-                showToast(`Successfully ${action === 'buy' ? 'bought' : 'sold'} ${quantity} shares of ${symbol}`, 'success');
+                showToast(Successfully ${action === 'buy' ? 'bought' : 'sold'} ${quantity} shares of ${symbol}, 'success');
                 return true;
             } else {
                 const userId = currentUser?.userId || localStorage.getItem('userId');
@@ -563,11 +564,11 @@ const PortfolioManager = {
                     setTimeout(() => window.location.href = 'login.html', 2000);
                     return false;
                 }
-                const response = await fetch(`${API_BASE}/orders`, {
+                const response = await fetch(${API_BASE}/orders, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                        'Authorization': Bearer ${localStorage.getItem('jwt')}
                     },
                     body: JSON.stringify({
                         userId: userId,
@@ -594,12 +595,12 @@ const PortfolioManager = {
 
                 await this.loadPortfolio();
                 this.updatePortfolio();
-                showToast(`Order executed: ${action} ${quantity} shares of ${symbol}`, 'success');
+                showToast(Order executed: ${action} ${quantity} shares of ${symbol}, 'success');
                 return true;
             }
         } catch (error) {
             console.error('Order error:', error);
-            showToast(`Order failed: ${error.message}`, 'error');
+            showToast(Order failed: ${error.message}, 'error');
             return false;
         }
     },
@@ -617,11 +618,11 @@ const PortfolioManager = {
         orderQuantity.select();
 
         if (action === 'buy') {
-            showToast(`Ready to buy ${symbol}. Enter quantity and click Buy.`, 'success');
+            showToast(Ready to buy ${symbol}. Enter quantity and click Buy., 'success');
         } else {
             const maxShares = portfolio.holdings[symbol]?.shares || 0;
             orderQuantity.value = maxShares;
-            showToast(`Ready to sell ${symbol}. Adjust quantity if needed and click Sell.`, 'success');
+            showToast(Ready to sell ${symbol}. Adjust quantity if needed and click Sell., 'success');
         }
     }
 };
@@ -688,13 +689,13 @@ const WatchlistManager = {
 
         symbol = symbol.toUpperCase();
         if (watchlist.includes(symbol)) {
-            showToast(`${symbol} is already in your watchlist`, 'error');
+            showToast(${symbol} is already in your watchlist, 'error');
             return false;
         }
 
         const stock = DataService.getStockBySymbol(symbol);
         if (!stock) {
-            showToast(`Could not find stock with symbol ${symbol}`, 'error');
+            showToast(Could not find stock with symbol ${symbol}, 'error');
             return false;
         }
 
@@ -704,14 +705,14 @@ const WatchlistManager = {
                 localStorage.setItem('watchlist', JSON.stringify(watchlist));
                 this.updateWatchlistTable();
                 updateBadge('watchlist-badge', watchlist.length);
-                showToast(`Added ${symbol} to watchlist`, 'success');
+                showToast(Added ${symbol} to watchlist, 'success');
                 return true;
             } else {
-                const response = await fetch(`${API_BASE}/watchlist`, {
+                const response = await fetch(${API_BASE}/watchlist, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                        'Authorization': Bearer ${localStorage.getItem('jwt')}
                     },
                     body: JSON.stringify({ symbol })
                 });
@@ -725,11 +726,11 @@ const WatchlistManager = {
                 localStorage.setItem('watchlist', JSON.stringify(watchlist));
                 this.updateWatchlistTable();
                 updateBadge('watchlist-badge', watchlist.length);
-                showToast(`Added ${symbol} to watchlist`, 'success');
+                showToast(Added ${symbol} to watchlist, 'success');
                 return true;
             }
         } catch (error) {
-            showToast(`Failed to add to watchlist: ${error.message}`, 'error');
+            showToast(Failed to add to watchlist: ${error.message}, 'error');
             return false;
         }
     },
@@ -741,13 +742,13 @@ const WatchlistManager = {
                 localStorage.setItem('watchlist', JSON.stringify(watchlist));
                 this.updateWatchlistTable();
                 updateBadge('watchlist-badge', watchlist.length);
-                showToast(`Removed ${symbol} from watchlist`, 'success');
+                showToast(Removed ${symbol} from watchlist, 'success');
                 return true;
             } else {
-                const response = await fetch(`${API_BASE}/watchlist/${symbol}`, {
+                const response = await fetch(${API_BASE}/watchlist/${symbol}, {
                     method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+                        'Authorization': Bearer ${localStorage.getItem('jwt')}
                     }
                 });
 
@@ -760,11 +761,11 @@ const WatchlistManager = {
                 localStorage.setItem('watchlist', JSON.stringify(watchlist));
                 this.updateWatchlistTable();
                 updateBadge('watchlist-badge', watchlist.length);
-                showToast(`Removed ${symbol} from watchlist`, 'success');
+                showToast(Removed ${symbol} from watchlist, 'success');
                 return true;
             }
         } catch (error) {
-            showToast(`Failed to remove from watchlist: ${error.message}`, 'error');
+            showToast(Failed to remove from watchlist: ${error.message}, 'error');
             return false;
         }
     }
@@ -888,7 +889,7 @@ function initStockChart() {
                 return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             }) : [],
             datasets: [{
-                label: selectedStock ? `${selectedStock.symbol} Price` : 'Price',
+                label: selectedStock ? ${selectedStock.symbol} Price : 'Price',
                 data: selectedStock ? Array(20).fill(0).map(() => {
                     const base = selectedStock.price;
                     return base + (Math.random() - 0.5) * base * 0.05;
@@ -919,7 +920,7 @@ function initStockChart() {
                 legend: { labels: { color: isDarkMode ? '#f8fafc' : '#1e293b' } },
                 tooltip: {
                     callbacks: {
-                        label: context => `${context.dataset.label}: ${formatCurrency(context.parsed.y)}`
+                        label: context => ${context.dataset.label}: ${formatCurrency(context.parsed.y)}
                     }
                 }
             }
@@ -928,7 +929,7 @@ function initStockChart() {
 
     const indicator = technicalIndicator.value;
     if (indicator) {
-        showToast(`Applied ${indicator.toUpperCase()} indicator`, 'success');
+        showToast(Applied ${indicator.toUpperCase()} indicator, 'success');
     }
 }
 
@@ -978,7 +979,7 @@ function setupEventListeners() {
         filteredStocks.forEach(stock => {
             const option = document.createElement('option');
             option.value = stock.symbol;
-            option.textContent = `${stock.symbol} - ${stock.name}`;
+            option.textContent = ${stock.symbol} - ${stock.name};
             stockSelect.appendChild(option);
         });
     });

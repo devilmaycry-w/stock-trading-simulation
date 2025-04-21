@@ -92,18 +92,13 @@ stock-trading/
    ```bash
    mvn clean install
    ```
-
-5. **Run Tailwind CSS**:
-   ```bash
-   npx tailwindcss -i ./src/main/resources/static/input.css -o ./src/main/resources/static/tailwind.css --watch
-   ```
-
-6. **Run the App**:
+   
+5. **Run the App**:
    ```bash
    java -jar target/stock-trading-simulator-1.0-SNAPSHOT.jar
    ```
 
-7. **Expose Locally with Ngrok**:
+6. **Expose Locally with Ngrok**:
    ```bash
    ngrok http 8080
    ```
@@ -116,22 +111,14 @@ stock-trading/
 - 🔗 Public: `https://<ngrok-id>.ngrok-free.app`  
 - 📝 **Sign up**: `/signup.html`  
 - 🔐 **Login**: `/login.html`  
-  - Example: `demo:demo123`
 
 ---
 
 ## 🎥 Demo
 
-- 🌐 **Live Demo**: [https://403d-103-206-137-166.ngrok-free.app](https://403d-103-206-137-166.ngrok-free.app)  
+- 🌐 **Live Demo**:- the live link is only available upto 2 hours.
 - 🎬 **Screencast**: Watch on Google Drive  
 - 👤 **Credentials**: `demo:demo123` (or create your own)
-
----
-
-## 📸 Screenshots
-
-- 📥 Signup  
-- 📊 Dashboard  
 
 ---
 

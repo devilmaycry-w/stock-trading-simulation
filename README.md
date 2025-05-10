@@ -2,7 +2,7 @@
 
 # 📈 Stock Trading Simulator
 
-A **web-based stock trading simulator** built for the **EazyByts internship demo**, enabling users to practice stock trading in a risk-free environment.
+Developed a web-based **stock trading simulator** that enables X users to practice **(real time + mock )** trading stocks in a risk-free environment
 
 ---
 
@@ -129,4 +129,4 @@ A **web-based stock trading simulator** built for the **EazyByts internship demo
 
 ---
 
-🛠️ **Built with ❤️ for the EazyByts Internship Demo - April 2025**
+🛠️ **Built with Codexcity❤️**
